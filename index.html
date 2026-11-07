@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>RoofFlow AI | Missed-Call Recovery for Texas Roofers</title>
+  <meta name="description" content="The autonomous conversational AI built for Texas roofers. Turns missed calls into booked roof inspections within 5 seconds via natural, bilingual SMS." />
+  <meta name="theme-color" content="#000000" />
+  <meta name="color-scheme" content="dark" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="RoofFlow AI | Never Lose a $15,000 Roofing Job to a Missed Call Again" />
+  <meta property="og:description" content="Autonomous, bilingual SMS follow-up that turns missed calls into booked roof inspections for Texas contractors." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230071e3'/%3E%3Cpath d='M4.5 12.5 12 5.5l7.5 7' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M13 10.5 9.5 15h2.3l-1 4 3.7-5h-2.3z' fill='%23ff9f0a'/%3E%3C/svg%3E" />
+
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#000000',
+            graphite: '#0a0d14',
+            royal: '#0b1a30',
+            ink: '#f5f5f7',
+            metal: '#86868b',
+            silver: '#c7c7cc',
+            apple: '#0071e3',
+            electric: '#0a84ff',
+            live: '#30d158',
+            ember: '#ff9f0a'
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', '"Segoe UI"', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* ---------- Canvas ---------- */
+    html { background: #000; scroll-behavior: smooth; scroll-padding-top: 88px; -webkit-text-size-adjust: 100%; }
+    html:has(dialog[open]) { overflow: hidden; }
+    body {
+      margin: 0;
+      color: #f5f5f7;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: clip;
+    }
+    .canvas {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(70% 55% at 50% -8%, #0b1a30 0%, rgba(11, 26, 48, 0) 72%),
+        radial-gradient(55% 45% at 92% 38%, rgba(11, 26, 48, .75) 0%, rgba(11, 26, 48, 0) 70%),
+        radial-gradient(60% 50% at 4% 78%, #0a0d14 0%, rgba(10, 13, 20, 0) 72%),
+        #000;
+    }
+
+    /* ---------- Glass ---------- */
+    .glass {
+      background: rgba(18, 20, 26, 0.7);
+      -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-nav {
+      background: rgba(0, 0, 0, 0.62);
+      -webkit-backdrop-filter: saturate(180%) blur(24px);
+      backdrop-filter: saturate(180%) blur(24px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+      min-height: 44px; padding: 0 1.375rem; border-radius: 999px;
+      font-weight: 500; letter-spacing: -.01em; white-space: nowrap; cursor: pointer;
+      transition: transform .2s ease, box-shadow .25s ease, background-color .25s ease, border-color .25s ease;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-gloss {
+      color: #fff;
+      background: linear-gradient(180deg, #2a90ff 0%, #0071e3 52%, #0064cc 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .34), 0 0 0 1px rgba(10, 132, 255, .35), 0 6px 22px rgba(0, 113, 227, .38);
+    }
+    .btn-gloss:hover {
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .42), 0 0 0 1px rgba(10, 132, 255, .6), 0 8px 34px rgba(10, 132, 255, .62);
+    }
+    .btn-frost {
+      color: #f5f5f7;
+      background: rgba(255, 255, 255, .07);
+      -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, .14);
+    }
+    .btn-frost:hover { background: rgba(255, 255, 255, .13); border-color: rgba(255, 255, 255, .24); }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid #0a84ff; outline-offset: 3px; border-radius: 8px;
+    }
+    .btn:focus-visible { border-radius: 999px; }
+
+    /* ---------- Type ---------- */
+    .display {
+      font-size: clamp(2.5rem, 1.45rem + 5.2vw, 5.25rem);
+      line-height: 1.04; letter-spacing: -.035em; font-weight: 700; text-wrap: balance;
+    }
+    .h2 {
+      font-size: clamp(2rem, 1.5rem + 2.4vw, 3.5rem);
+      line-height: 1.07; letter-spacing: -.028em; font-weight: 700; text-wrap: balance;
+    }
+    .lede { text-wrap: pretty; }
+
+    /* ---------- Live dot ---------- */
+    .dot { position: relative; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #30d158; flex: none; }
+    .dot::after {
+      content: ""; position: absolute; inset: 0; border-radius: 50%; background: #30d158;
+      animation: ping 2s cubic-bezier(0, 0, .2, 1) infinite;
+    }
+    @keyframes ping { 75%, 100% { transform: scale(2.8); opacity: 0; } }
+
+    /* ---------- Scroll reveal ---------- */
+    .js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .8s cubic-bezier(.2, .7, .2, 1), transform .8s cubic-bezier(.2, .7, .2, 1); }
+    .js .reveal.in { opacity: 1; transform: none; }
+
+    /* ---------- iPhone ---------- */
+    .iphone {
+      width: 100%; max-width: 312px; margin-inline: auto; padding: 9px; border-radius: 50px;
+      background: linear-gradient(145deg, #3a3a3e, #17171a 45%, #2b2b2f);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .1), 0 30px 70px rgba(0, 0, 0, .7);
+    }
+    .iphone-screen { position: relative; display: flex; flex-direction: column; height: 590px; border-radius: 41px; background: #000; overflow: hidden; }
+    .island { position: absolute; top: 10px; left: 50%; width: 84px; height: 24px; margin-left: -42px; border-radius: 20px; background: #000; box-shadow: 0 0 0 1px rgba(255, 255, 255, .07); z-index: 2; }
+    .chat { flex: 1; min-height: 0; overflow-y: auto; padding: 10px 12px 14px; display: flex; flex-direction: column; gap: 6px; scrollbar-width: none; }
+    .chat::-webkit-scrollbar { display: none; }
+    .bubble {
+      max-width: 82%; padding: 7px 12px; border-radius: 18px;
+      font-size: 13.5px; line-height: 1.32; letter-spacing: -.005em; overflow-wrap: anywhere;
+      animation: bubble .32s cubic-bezier(.2, .9, .3, 1.15) both;
+    }
+    .bubble-in { align-self: flex-start; background: #26262a; color: #f5f5f7; border-bottom-left-radius: 5px; }
+    .bubble-out { align-self: flex-end; background: #0a84ff; color: #fff; border-bottom-right-radius: 5px; margin-block: 3px; }
+    @keyframes bubble { from { opacity: 0; transform: translateY(8px) scale(.94); } to { opacity: 1; transform: none; } }
+    .sys { align-self: center; margin: 4px 0 6px; text-align: center; font-size: 11px; color: #86868b; animation: bubble .3s ease both; }
+    .typing { display: inline-flex; gap: 4px; align-items: center; height: 18px; }
+    .typing i { width: 6px; height: 6px; border-radius: 50%; background: #86868b; animation: blink 1.1s infinite; }
+    .typing i:nth-child(2) { animation-delay: .16s; }
+    .typing i:nth-child(3) { animation-delay: .32s; }
+    @keyframes blink { 0%, 60%, 100% { opacity: .3; } 30% { opacity: 1; } }
+
+    /* ---------- Lead card ---------- */
+    .field-pill {
+      display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 4px 11px; border-radius: 999px;
+      font-size: 12.5px; line-height: 1.25; text-align: left;
+      color: #86868b; background: rgba(255, 255, 255, .04); border: 1px dashed rgba(255, 255, 255, .13);
+    }
+    .field-pill.captured {
+      color: #f5f5f7; background: rgba(48, 209, 88, .13); border: 1px solid rgba(48, 209, 88, .38);
+      animation: pop .42s cubic-bezier(.2, .9, .3, 1.35) both;
+    }
+    .field-pill.captured::before { content: ""; width: 6px; height: 6px; flex: none; border-radius: 50%; background: #30d158; }
+    @keyframes pop { from { transform: scale(.88); opacity: .3; } to { transform: none; opacity: 1; } }
+    .status-pill { padding: 3px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600; white-space: nowrap; color: #ff9f0a; background: rgba(255, 159, 10, .13); }
+    .status-pill.done { color: #30d158; background: rgba(48, 209, 88, .13); }
+    .bar-fill { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #0071e3, #30d158); transition: width .55s cubic-bezier(.2, .7, .2, 1); }
+
+    /* ---------- Lock screen alerts ---------- */
+    .lockscreen {
+      background:
+        radial-gradient(90% 60% at 80% 0%, rgba(10, 132, 255, .34), rgba(10, 132, 255, 0) 70%),
+        radial-gradient(80% 60% at 0% 100%, rgba(255, 159, 10, .13), rgba(255, 159, 10, 0) 70%),
+        #0b1220;
+    }
+    .alert-banner {
+      background: rgba(40, 44, 54, .72);
+      -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, .1);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .35);
+      animation: drop .62s cubic-bezier(.2, .95, .3, 1.12) both;
+    }
+    @keyframes drop { from { opacity: 0; transform: translateY(-26px) scale(.96); } to { opacity: 1; transform: none; } }
+
+    /* ---------- Segmented control ---------- */
+    .seg-btn { min-height: 32px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 500; color: #86868b; cursor: pointer; transition: color .2s ease, background-color .2s ease; }
+    .seg-btn:hover { color: #f5f5f7; }
+    .seg-btn[aria-pressed="true"] { color: #f5f5f7; background: rgba(255, 255, 255, .14); }
+
+    /* ---------- Keycaps ---------- */
+    .key { display: inline-flex; align-items: center; justify-content: center; padding: 10px 16px; border-radius: 14px; font-variant-numeric: tabular-nums; background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .1); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08); }
+
+    /* ---------- Legal modals ---------- */
+    dialog.legal {
+      width: min(680px, calc(100vw - 32px)); max-width: none; max-height: min(84vh, 760px); max-height: min(84dvh, 760px);
+      margin: auto; padding: 0; border-radius: 24px; color: #f5f5f7;
+      background: rgba(18, 20, 26, 0.92);
+      -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, .8);
+    }
+    dialog.legal[open] { display: flex; animation: modal .32s cubic-bezier(.2, .9, .3, 1.05) both; }
+    dialog.legal::backdrop { background: rgba(0, 0, 0, .66); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+    @keyframes modal { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: none; } }
+    .legal-inner { display: flex; flex-direction: column; width: 100%; min-height: 0; }
+    .legal-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 24px 28px; font-size: 15px; line-height: 1.6; color: #c7c7cc; }
+    .legal-body h3 { margin: 24px 0 6px; font-size: 16px; font-weight: 600; color: #f5f5f7; letter-spacing: -.01em; }
+    .legal-body p + p { margin-top: 10px; }
+    .legal-body ul { margin-top: 8px; padding-left: 20px; list-style: disc; }
+    .legal-body li + li { margin-top: 4px; }
+    .legal-body strong { color: #f5f5f7; font-weight: 600; }
+    .legal-body a { color: #0a84ff; }
+    .legal-callout { margin-top: 12px; padding: 14px 16px; border-radius: 14px; color: #f5f5f7; background: rgba(10, 132, 255, .11); border: 1px solid rgba(10, 132, 255, .32); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+      .js .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+
+<body class="bg-transparent">
+  <div class="canvas" aria-hidden="true"></div>
+
+  <!-- ============ Navigation ============ -->
+  <header class="glass-nav sticky top-0 z-50">
+    <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6" aria-label="Primary">
+      <a href="#top" class="flex items-center gap-2.5 rounded-lg" aria-label="RoofFlow AI home">
+        <svg class="h-8 w-8 flex-none" viewBox="0 0 32 32" aria-hidden="true">
+          <defs><linearGradient id="logoBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a90ff" /><stop offset="1" stop-color="#0058b8" /></linearGradient></defs>
+          <rect width="32" height="32" rx="8" fill="url(#logoBg)" />
+          <path d="M6 16.5 16 7.5l10 9" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M17.6 13.5 12.5 20.3h3.3l-1.400 5.700 5.2-7.2h-3.3z" fill="#ff9f0a" />
+        </svg>
+        <span class="text-[17px] font-semibold tracking-tight text-ink">RoofFlow AI</span>
+      </a>
+
+      <div class="hidden items-center gap-7 md:flex">
+        <a href="#features" class="text-sm text-silver transition-colors hover:text-ink">Features</a>
+        <a href="#how-it-works" class="text-sm text-silver transition-colors hover:text-ink">How It Works</a>
+        <a href="#live-demo" class="text-sm text-silver transition-colors hover:text-ink">Live Demo</a>
+        <a href="#compliance" class="text-sm text-silver transition-colors hover:text-ink">Compliance</a>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a href="mailto:support@roofflow.ai?subject=Book%20a%20RoofFlow%20AI%20Live%20Demo" class="btn btn-gloss hidden !min-h-[38px] !px-4 text-[13px] min-[400px]:inline-flex">Book a Live Demo</a>
+        <button id="menuBtn" type="button" class="inline-flex h-10 w-10 items-center justify-center rounded-full text-ink hover:bg-white/10 md:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <i data-lucide="menu" class="h-5 w-5"></i>
+        </button>
+      </div>
+    </nav>
+
+    <div id="mobileMenu" class="hidden border-t border-white/10 px-4 pb-4 pt-1 md:hidden">
+      <a href="#features" class="block border-b border-white/5 py-3 text-[15px] text-ink">Features</a>
+      <a href="#how-it-works" class="block border-b border-white/5 py-3 text-[15px] text-ink">How It Works</a>
+      <a href="#live-demo" class="block border-b border-white/5 py-3 text-[15px] text-ink">Live Demo</a>
+      <a href="#compliance" class="block py-3 text-[15px] text-ink">Compliance</a>
+      <a href="mailto:support@roofflow.ai?subject=Book%20a%20RoofFlow%20AI%20Live%20Demo" class="btn btn-gloss mt-2 w-full text-[15px] min-[400px]:hidden">Book a Live Demo</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============ Hero ============ -->
+    <section class="mx-auto max-w-6xl px-4 pb-16 pt-14 text-center sm:px-6 sm:pt-20 lg:pb-24 lg:pt-28">
+      <div class="glass mx-auto inline-flex max-w-full items-center gap-2.5 rounded-full px-4 py-2 text-[12.5px] text-silver sm:text-[13px]">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Live in Texas <span class="px-0.5 text-metal">&bull;</span> Sub-second AI Response (41ms)</span>
+      </div>
+
+      <h1 class="display mx-auto mt-7 max-w-5xl text-ink">Never Lose a $15,000 Roofing Job to a Missed Call Again.</h1>
+
+      <p class="lede mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-metal sm:text-[21px] sm:leading-[1.45]">
+        The autonomous conversational AI built for Texas roofers. Turns missed calls into booked roof inspections within 5 seconds via natural, bilingual SMS.
+      </p>
+
+      <div class="mt-9 flex flex-col items-stretch justify-center gap-3 min-[440px]:flex-row min-[440px]:items-center">
+        <a href="#get-started" class="btn btn-gloss !min-h-[50px] !px-8 text-[17px]">Get Started <i data-lucide="arrow-right" class="h-[18px] w-[18px]"></i></a>
+        <button id="watchDemo" type="button" class="btn btn-frost !min-h-[50px] !px-7 text-[17px]"><i data-lucide="play" class="h-4 w-4 fill-current"></i> Watch 60s Demo</button>
+      </div>
+
+      <dl class="glass mx-auto mt-14 grid max-w-3xl grid-cols-3 divide-x divide-white/10 rounded-2xl py-5">
+        <div class="flex flex-col-reverse gap-0.5 px-2 sm:px-5">
+          <dt class="text-xs leading-snug text-metal sm:text-sm">Speed-to-Lead</dt>
+          <dd class="text-2xl font-semibold tracking-tight text-ink sm:text-[32px] sm:leading-10">41ms</dd>
+        </div>
+        <div class="flex flex-col-reverse gap-0.5 px-2 sm:px-5">
+          <dt class="text-xs leading-snug text-metal sm:text-sm">Bilingual (EN/ES)</dt>
+          <dd class="text-2xl font-semibold tracking-tight text-ink sm:text-[32px] sm:leading-10">100%</dd>
+        </div>
+        <div class="flex flex-col-reverse gap-0.5 px-2 sm:px-5">
+          <dt class="text-xs leading-snug text-metal sm:text-sm">Setup Friction</dt>
+          <dd class="text-2xl font-semibold tracking-tight text-ink sm:text-[32px] sm:leading-10">Zero</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- ============ Product showcase ============ -->
+    <section id="live-demo" class="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-24">
+      <div class="reveal mx-auto max-w-3xl text-center">
+        <p class="text-[15px] font-semibold text-electric">Live Demo</p>
+        <h2 class="h2 mt-2 text-ink">Watch a missed call become a qualified lead.</h2>
+        <p class="lede mt-4 text-lg leading-relaxed text-metal">A homeowner with hail damage calls while you are up on a roof. Here is everything that happens next, without you touching your phone.</p>
+      </div>
+
+      <div class="relative mt-12">
+        <div class="pointer-events-none absolute inset-x-0 -inset-y-12 -z-10 rounded-full bg-apple/10 blur-3xl" aria-hidden="true"></div>
+
+        <div id="mockup" class="glass rounded-[28px] p-3 shadow-[0_40px_120px_rgba(0,0,0,.65)] sm:p-5">
+          <!-- Console toolbar -->
+          <div class="flex flex-wrap items-center justify-between gap-3 px-2 pb-4 pt-1">
+            <div class="flex items-center gap-3">
+              <span class="dot" aria-hidden="true"></span>
+              <p class="text-[13px] text-silver">RoofFlow Console <span class="text-metal">&middot; Simulation with sample data</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="flex rounded-full bg-white/5 p-0.5" role="group" aria-label="Homeowner language">
+                <button type="button" class="seg-btn" data-lang="en" aria-pressed="true">English</button>
+                <button type="button" class="seg-btn" data-lang="es" aria-pressed="false">Espa&ntilde;ol</button>
+              </div>
+              <button id="replay" type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-silver transition-colors hover:bg-white/10 hover:text-ink" aria-label="Replay demo" title="Replay demo">
+                <i data-lucide="rotate-ccw" class="h-4 w-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.04fr)_minmax(0,1fr)]">
+            <!-- Left: iPhone -->
+            <div class="rounded-[22px] bg-black/30 px-3 py-5 md:row-span-2 lg:row-span-1">
+              <p class="mb-4 text-center text-xs font-medium text-metal">Homeowner's iPhone</p>
+              <div class="iphone">
+                <div class="iphone-screen">
+                  <div class="island" aria-hidden="true"></div>
+                  <div class="flex-none border-b border-white/10 bg-[#1c1c1e]/90 pb-2 pt-11 text-center">
+                    <div class="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-b from-[#8e8e93] to-[#5a5a5f] text-xs font-semibold text-white" aria-hidden="true">YR</div>
+                    <p class="mt-1 text-[11.5px] font-medium text-ink">Your Roofing Co.</p>
+                  </div>
+                  <div id="chat" class="chat" aria-label="Sample text conversation between a homeowner and RoofFlow AI"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Center: Lead card -->
+            <div class="flex min-w-0 flex-col rounded-[22px] border border-white/5 bg-white/[.03] p-5">
+              <p class="text-xs font-medium text-metal">Real-time lead capture</p>
+              <div class="mt-4 flex items-start justify-between gap-3">
+                <div class="flex min-w-0 items-center gap-3">
+                  <div class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-apple/20 text-electric">
+                    <i data-lucide="user-round" class="h-5 w-5"></i>
+                  </div>
+                  <div class="min-w-0">
+                    <p id="leadName" class="text-[17px] font-semibold leading-tight tracking-tight text-ink">Unknown caller</p>
+                    <p class="mt-0.5 text-xs text-metal">Missed call, 2:14 PM</p>
+                  </div>
+                </div>
+                <span id="leadStatus" class="status-pill">Waiting</span>
+              </div>
+
+              <ul class="mt-5 flex flex-col divide-y divide-white/[.07]">
+                <li class="flex items-center justify-between gap-3 py-3">
+                  <span class="flex items-center gap-2 text-[13px] text-silver"><i data-lucide="cloud-hail" class="h-4 w-4 text-ember"></i> Damage</span>
+                  <span class="field-pill" data-field="damage">Listening</span>
+                </li>
+                <li class="flex items-center justify-between gap-3 py-3">
+                  <span class="flex items-center gap-2 text-[13px] text-silver"><i data-lucide="map-pin" class="h-4 w-4 text-ember"></i> Address</span>
+                  <span class="field-pill" data-field="address">Listening</span>
+                </li>
+                <li class="flex items-center justify-between gap-3 py-3">
+                  <span class="flex items-center gap-2 text-[13px] text-silver"><i data-lucide="hash" class="h-4 w-4 text-ember"></i> ZIP</span>
+                  <span class="field-pill" data-field="zip">Listening</span>
+                </li>
+                <li class="flex items-center justify-between gap-3 py-3">
+                  <span class="flex items-center gap-2 text-[13px] text-silver"><i data-lucide="phone" class="h-4 w-4 text-ember"></i> Phone</span>
+                  <span class="field-pill" data-field="phone">Listening</span>
+                </li>
+              </ul>
+
+              <div class="mt-auto pt-4">
+                <div class="flex items-center justify-between text-xs text-metal">
+                  <span id="fieldCount">0 of 4 fields</span>
+                  <span id="leadLang">Language: detecting</span>
+                </div>
+                <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10"><div id="bar" class="bar-fill"></div></div>
+                <dl class="mt-4 grid grid-cols-2 gap-2">
+                  <div class="rounded-xl bg-white/[.04] p-3">
+                    <dt class="text-[11px] text-metal">AI response</dt>
+                    <dd id="respTime" class="mt-0.5 text-[19px] font-semibold tracking-tight text-ink">&ndash;</dd>
+                  </div>
+                  <div class="rounded-xl bg-white/[.04] p-3">
+                    <dt class="text-[11px] text-metal">Next step</dt>
+                    <dd id="nextStep" class="mt-1 text-[13px] leading-tight text-ink">Qualifying</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+
+            <!-- Right: Contractor alert -->
+            <div class="lockscreen flex min-h-[400px] min-w-0 flex-col rounded-[22px] border border-white/5 p-4">
+              <p class="text-xs font-medium text-silver">Contractor's phone</p>
+              <div class="mb-5 mt-5 text-center">
+                <p class="text-[13px] text-silver">Saturday, November 7</p>
+                <p class="text-[60px] font-semibold leading-[1.05] tracking-tight text-ink/95">2:15</p>
+              </div>
+
+              <p id="alertsEmpty" class="my-auto px-4 pb-6 text-center text-[13px] leading-snug text-silver">Alerts land here the moment a lead qualifies.</p>
+
+              <div class="flex flex-col gap-2.5">
+                <div id="alertTelegram" class="alert-banner rounded-[20px] p-3" hidden>
+                  <div class="flex gap-3">
+                    <span class="flex h-9 w-9 flex-none items-center justify-center rounded-[10px] bg-electric text-white"><i data-lucide="send" class="h-[17px] w-[17px]"></i></span>
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-baseline justify-between gap-2">
+                        <p class="truncate text-[13px] font-semibold text-ink">Telegram &middot; RoofFlow Alerts</p>
+                        <span class="flex-none text-[11px] text-silver">now</span>
+                      </div>
+                      <p class="mt-0.5 text-[13px] leading-snug text-ink">New qualified lead: <span class="alert-name">Maria Delgado</span></p>
+                      <p class="mt-0.5 text-[12.5px] leading-snug text-silver">Hail, ceiling leak. Austin 78745. <span class="alert-lang"></span></p>
+                    </div>
+                  </div>
+                </div>
+                <div id="alertSms" class="alert-banner rounded-[20px] p-3" hidden>
+                  <div class="flex gap-3">
+                    <span class="flex h-9 w-9 flex-none items-center justify-center rounded-[10px] bg-live text-black"><i data-lucide="message-circle" class="h-[18px] w-[18px]"></i></span>
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-baseline justify-between gap-2">
+                        <p class="truncate text-[13px] font-semibold text-ink">Messages &middot; RoofFlow AI</p>
+                        <span class="flex-none text-[11px] text-silver">now</span>
+                      </div>
+                      <p class="mt-0.5 text-[13px] leading-snug text-ink">Call <span class="alert-name">Maria Delgado</span> at (512) 555-0147 to confirm the inspection.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Bento ============ -->
+    <section id="features" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-24">
+      <div class="reveal mx-auto max-w-3xl text-center">
+        <p class="text-[15px] font-semibold text-electric">Features</p>
+        <h2 class="h2 mt-2 text-ink">Built for how Texas roofers actually work.</h2>
+      </div>
+
+      <div class="mt-12 grid gap-4 md:grid-cols-6">
+        <!-- Speed -->
+        <article class="reveal glass flex flex-col rounded-[28px] p-7 md:col-span-4 sm:p-9">
+          <div class="flex items-center gap-2 text-electric"><i data-lucide="zap" class="h-5 w-5"></i><h3 class="text-[15px] font-semibold">41ms Speed to Lead</h3></div>
+          <p class="mt-6 text-[72px] font-bold leading-none tracking-[-.04em] text-ink sm:text-[104px]">41<span class="text-[.5em] font-semibold tracking-tight text-metal">ms</span></p>
+          <p class="lede mt-4 max-w-md text-[17px] leading-snug text-silver">Beat competitors before the homeowner dials the next roofer on Google Maps.</p>
+          <div class="mt-auto pt-8" aria-hidden="true">
+            <div class="flex justify-between gap-6 text-xs">
+              <span class="font-medium text-electric">RoofFlow AI replies</span>
+              <span class="text-right text-metal">Homeowner dials the next roofer</span>
+            </div>
+            <div class="relative mt-2 h-1.5 rounded-full bg-white/10">
+              <div class="absolute inset-y-0 left-0 w-[3%] min-w-[10px] rounded-full bg-electric shadow-[0_0_14px_#0a84ff]"></div>
+              <div class="absolute -top-[3px] right-0 h-3 w-3 rounded-full border border-white/25 bg-[#23252c]"></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Bilingual -->
+        <article class="reveal glass flex flex-col rounded-[28px] p-7 md:col-span-2">
+          <div class="flex items-center gap-2 text-live"><i data-lucide="languages" class="h-5 w-5"></i><h3 class="text-[15px] font-semibold">Bilingual Texas Support</h3></div>
+          <div class="my-7 flex flex-col gap-2 text-[14px] leading-snug">
+            <p class="self-end rounded-[16px] rounded-br-[5px] bg-electric px-3 py-2 text-white">My roof is leaking.</p>
+            <p class="self-start rounded-[16px] rounded-bl-[5px] bg-white/10 px-3 py-2 text-ink">Sorry to hear that. What's the address?</p>
+            <p class="self-end rounded-[16px] rounded-br-[5px] bg-electric px-3 py-2 text-white">Mi techo tiene una gotera.</p>
+            <p class="self-start rounded-[16px] rounded-bl-[5px] bg-white/10 px-3 py-2 text-ink">Lamento oír eso. &iquest;Cuál es la dirección?</p>
+          </div>
+          <p class="lede mt-auto text-[15px] leading-snug text-silver">Instant English &amp; Spanish language auto-detection for Texas homeowners.</p>
+        </article>
+
+        <!-- Safety -->
+        <article class="reveal glass flex flex-col rounded-[28px] p-7 md:col-span-3 sm:p-9">
+          <div class="flex items-center gap-2 text-ember"><i data-lucide="shield-check" class="h-5 w-5"></i><h3 class="text-[15px] font-semibold">Zero Hallucination Safety</h3></div>
+          <p class="lede mt-4 text-[22px] font-semibold leading-tight tracking-tight text-ink sm:text-[26px]">Empathetic reassurance without risky emergency promises.</p>
+          <ul class="mt-6 flex flex-col gap-3 text-[14px] leading-snug">
+            <li class="flex gap-2.5 text-silver"><i data-lucide="check" class="mt-0.5 h-4 w-4 flex-none text-live"></i> <span>&ldquo;I'm sorry you're dealing with that. Let's get a roofer to take a look.&rdquo;</span></li>
+            <li class="flex gap-2.5 text-metal"><i data-lucide="x" class="mt-0.5 h-4 w-4 flex-none text-ember"></i> <span>&ldquo;A crew will be there in 30 minutes.&rdquo;</span></li>
+            <li class="flex gap-2.5 text-metal"><i data-lucide="x" class="mt-0.5 h-4 w-4 flex-none text-ember"></i> <span>&ldquo;Your insurance will cover the whole roof.&rdquo;</span></li>
+          </ul>
+        </article>
+
+        <!-- Forwarding -->
+        <article class="reveal glass flex flex-col rounded-[28px] p-7 md:col-span-3 sm:p-9">
+          <div class="flex items-center gap-2 text-electric"><i data-lucide="phone-forwarded" class="h-5 w-5"></i><h3 class="text-[15px] font-semibold">One-Click Forwarding</h3></div>
+          <div class="mt-6 flex flex-wrap items-center gap-2 text-ink" aria-hidden="true">
+            <span class="key text-[26px] font-semibold tracking-tight">*71</span>
+            <i data-lucide="plus" class="h-4 w-4 text-metal"></i>
+            <span class="key text-[15px] text-silver">Your RoofFlow number</span>
+            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-live text-black"><i data-lucide="phone" class="h-5 w-5 fill-current"></i></span>
+          </div>
+          <p class="lede mt-6 text-[17px] leading-snug text-silver">Works with existing contractor cell phones via conditional call forwarding (<code class="font-mono text-[.92em] text-ink">*71</code>).</p>
+          <p class="mt-auto pt-4 text-xs leading-snug text-metal">Forwarding codes vary by carrier. We confirm yours during setup.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ How it works ============ -->
+    <section id="how-it-works" class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-24">
+      <div class="reveal mx-auto max-w-3xl text-center">
+        <p class="text-[15px] font-semibold text-electric">How It Works</p>
+        <h2 class="h2 mt-2 text-ink">Set it up once. Stay on the roof.</h2>
+      </div>
+
+      <ol class="mt-12 grid gap-4 md:grid-cols-3">
+        <li class="reveal glass rounded-[24px] p-7">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-apple/20 text-[15px] font-semibold text-electric">1</span>
+          <h3 class="mt-5 text-[21px] font-semibold tracking-tight text-ink">Forward your missed calls</h3>
+          <p class="lede mt-2 text-[15px] leading-relaxed text-metal">Dial the forwarding code from the cell you already use. Your number stays the same, and calls you answer ring like they always have.</p>
+        </li>
+        <li class="reveal glass rounded-[24px] p-7">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-apple/20 text-[15px] font-semibold text-electric">2</span>
+          <h3 class="mt-5 text-[21px] font-semibold tracking-tight text-ink">AI texts back and qualifies</h3>
+          <p class="lede mt-2 text-[15px] leading-relaxed text-metal">An unanswered call gets a text right away, in English or Spanish. The AI gathers the damage, address, ZIP and name through plain conversation.</p>
+        </li>
+        <li class="reveal glass rounded-[24px] p-7">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-apple/20 text-[15px] font-semibold text-electric">3</span>
+          <h3 class="mt-5 text-[21px] font-semibold tracking-tight text-ink">You get a ready lead</h3>
+          <p class="lede mt-2 text-[15px] leading-relaxed text-metal">The full lead lands in Telegram or SMS as soon as it qualifies, so you or your office can call back and lock in the inspection.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============ Closing CTA ============ -->
+    <section id="get-started" class="mx-auto max-w-6xl px-4 pb-20 pt-8 sm:px-6 lg:pb-28">
+      <div class="reveal glass relative overflow-hidden rounded-[32px] px-6 py-14 text-center sm:px-12 sm:py-20">
+        <div class="pointer-events-none absolute left-1/2 top-0 h-64 w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-apple/25 blur-3xl" aria-hidden="true"></div>
+        <h2 class="h2 relative mx-auto max-w-3xl text-ink">The next hailstorm will ring your phone off the hook.</h2>
+        <p class="lede relative mx-auto mt-4 max-w-xl text-lg leading-relaxed text-metal">Let RoofFlow AI handle the calls you can't catch from the roof, the truck or the supply house.</p>
+        <div class="relative mt-8 flex flex-col items-center gap-4">
+          <a href="mailto:support@roofflow.ai?subject=Book%20a%20RoofFlow%20AI%20Live%20Demo" class="btn btn-gloss !min-h-[50px] !px-8 text-[17px]">Book a Live Demo</a>
+          <a href="mailto:support@roofflow.ai" class="text-[15px] text-silver underline-offset-4 hover:text-ink hover:underline">support@roofflow.ai</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Legal footer ============ -->
+  <footer id="compliance" class="border-t border-white/10 bg-black/50">
+    <div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_1.6fr]">
+      <div>
+        <div class="flex items-center gap-2.5">
+          <svg class="h-7 w-7 flex-none" viewBox="0 0 32 32" aria-hidden="true">
+            <rect width="32" height="32" rx="8" fill="url(#logoBg)" />
+            <path d="M6 16.5 16 7.5l10 9" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M17.6 13.5 12.5 20.3h3.3l-1.400 5.700 5.2-7.2h-3.3z" fill="#ff9f0a" />
+          </svg>
+          <h2 class="text-base font-semibold tracking-tight text-ink">Compliance</h2>
+        </div>
+        <p class="lede mt-4 text-sm leading-relaxed text-silver">RoofFlow AI &mdash; Automated Messaging Systems for Home Service Contractors. Based in Texas, USA. Contact: <a href="mailto:support@roofflow.ai" class="text-electric underline-offset-2 hover:underline">support@roofflow.ai</a></p>
+        <div class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+          <a href="#privacy" class="py-1 font-medium text-ink underline underline-offset-4 decoration-white/30 hover:decoration-white">Privacy Policy</a>
+          <a href="#terms" class="py-1 font-medium text-ink underline underline-offset-4 decoration-white/30 hover:decoration-white">Terms of Service</a>
+        </div>
+        <p class="mt-6 text-xs text-metal">&copy; 2026 RoofFlow AI. All rights reserved.</p>
+      </div>
+
+      <section class="glass rounded-[20px] p-6" aria-labelledby="smsDisclosure">
+        <div class="flex items-center gap-2 text-silver">
+          <i data-lucide="message-square-text" class="h-4 w-4"></i>
+          <h3 id="smsDisclosure" class="text-[13px] font-semibold">SMS Disclosure</h3>
+        </div>
+        <p class="lede mt-3 text-sm leading-relaxed text-silver">By placing a call to participating contractor lines or submitting your phone number, you consent to receive automated conversational SMS updates regarding your roofing inquiry from RoofFlow AI on behalf of our local partners. Message frequency varies. Message and data rates may apply. Reply STOP to cancel at any time. Reply HELP for assistance.</p>
+      </section>
+    </div>
+  </footer>
+
+  <!-- ============ Privacy modal ============ -->
+  <dialog id="privacy" class="legal" aria-labelledby="privacyTitle">
+    <div class="legal-inner">
+      <div class="flex flex-none items-center justify-between gap-4 px-6 pb-3 pt-5">
+        <div>
+          <h2 id="privacyTitle" class="text-[22px] font-semibold tracking-tight text-ink">Privacy Policy</h2>
+          <p class="mt-0.5 text-xs text-metal">Last updated November 7, 2026</p>
+        </div>
+        <button type="button" class="modal-close flex h-10 w-10 flex-none items-center justify-center rounded-full bg-white/10 text-ink hover:bg-white/20" aria-label="Close Privacy Policy"><i data-lucide="x" class="h-[18px] w-[18px]"></i></button>
+      </div>
+      <div class="legal-body" tabindex="0">
+        <p class="legal-callout">We respect your privacy. Mobile information and SMS opt-in consent will never be shared with or sold to third parties or affiliates for marketing or promotional purposes.</p>
+
+        <h3>Who we are</h3>
+        <p>RoofFlow AI provides automated messaging systems for home service contractors and is based in Texas, USA. We send SMS messages on behalf of participating roofing contractors.</p>
+
+        <h3>Information we collect</h3>
+        <ul>
+          <li>Your phone number, when you call a participating contractor line or submit it to us.</li>
+          <li>What you share by text, such as your name, property address, ZIP code and a description of your roof damage.</li>
+          <li>Message records, including delivery status, timestamps, your language preference and opt-out status.</li>
+          <li>Basic technical data when you visit this website.</li>
+        </ul>
+
+        <h3>How we use it</h3>
+        <ul>
+          <li>To respond to your roofing inquiry by SMS and gather the details needed for an inspection.</li>
+          <li>To pass your inquiry to the participating contractor you called, so they can follow up with you.</li>
+          <li>To honor STOP and HELP requests and keep records of consent and opt-outs.</li>
+          <li>To operate, secure and improve the service.</li>
+        </ul>
+
+        <h3>When information is disclosed</h3>
+        <p>We disclose inquiry details to the contractor you contacted so they can respond to your request. We also use service providers, such as messaging carriers and telecommunications platforms, solely to deliver and support the service. We may disclose information when required by law. None of these disclosures are for third-party marketing or promotional purposes.</p>
+
+        <h3>Security and retention</h3>
+        <p>We use reasonable administrative and technical safeguards to protect your information, and keep it only as long as needed to provide the service and meet legal obligations.</p>
+
+        <h3>Your choices</h3>
+        <p>Reply <strong>STOP</strong> to any message to stop receiving texts. Reply <strong>HELP</strong> for assistance. To ask about, correct or delete your information, email <a href="mailto:support@roofflow.ai">support@roofflow.ai</a>.</p>
+
+        <h3>Changes to this policy</h3>
+        <p>If we update this policy, we will post the new version here with a revised date.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ============ Terms modal ============ -->
+  <dialog id="terms" class="legal" aria-labelledby="termsTitle">
+    <div class="legal-inner">
+      <div class="flex flex-none items-center justify-between gap-4 px-6 pb-3 pt-5">
+        <div>
+          <h2 id="termsTitle" class="text-[22px] font-semibold tracking-tight text-ink">Terms of Service</h2>
+          <p class="mt-0.5 text-xs text-metal">Last updated November 7, 2026</p>
+        </div>
+        <button type="button" class="modal-close flex h-10 w-10 flex-none items-center justify-center rounded-full bg-white/10 text-ink hover:bg-white/20" aria-label="Close Terms of Service"><i data-lucide="x" class="h-[18px] w-[18px]"></i></button>
+      </div>
+      <div class="legal-body" tabindex="0">
+        <h3 style="margin-top:8px">Messaging program</h3>
+        <p>RoofFlow AI sends automated conversational SMS messages about roofing inquiries on behalf of participating local contractors. Messages may acknowledge a missed call, ask for details about your roof and property, and share updates about your inquiry.</p>
+
+        <h3>Consent</h3>
+        <p>By placing a call to a participating contractor line or submitting your phone number, you consent to receive these messages. Consent is not a condition of purchasing any goods or services.</p>
+
+        <h3>Frequency and cost</h3>
+        <p>Message frequency varies based on your inquiry. Message and data rates may apply according to your mobile plan.</p>
+
+        <h3>How to opt out</h3>
+        <ul>
+          <li>Reply <strong>STOP</strong> to any message to cancel. You will receive one confirmation, and no further messages will be sent unless you opt in again.</li>
+          <li>Reply <strong>HELP</strong> for assistance, or email <a href="mailto:support@roofflow.ai">support@roofflow.ai</a>.</li>
+        </ul>
+
+        <h3>Carrier disclaimer</h3>
+        <p>Mobile carriers are not liable for delayed or undelivered messages. Delivery depends on network availability and your device, and is not guaranteed.</p>
+
+        <h3>Not for emergencies</h3>
+        <p>The messaging service is automated and is not an emergency service. It does not promise a repair, an arrival time, an insurance outcome or a price. If you believe there is immediate danger, call 911.</p>
+
+        <h3>Contractors</h3>
+        <p>Roofing work is provided by independent contractors, not RoofFlow AI. Any inspection, estimate or repair is solely between you and the contractor.</p>
+
+        <h3>Limitation of liability</h3>
+        <p>The service is provided "as is." To the fullest extent permitted by law, RoofFlow AI is not liable for indirect or consequential damages arising from use of the service, including undelivered messages or contractor services.</p>
+
+        <h3>Governing law and changes</h3>
+        <p>These terms are governed by the laws of the State of Texas. We may update them by posting a new version here. Questions can be sent to <a href="mailto:support@roofflow.ai">support@roofflow.ai</a>. Use of our information is described in our <a href="#privacy">Privacy Policy</a>.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      var $ = function (s, r) { return (r || document).querySelector(s); };
+      var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (window.lucide) lucide.createIcons();
+
+      /* ---------- Mobile menu ---------- */
+      var menuBtn = $('#menuBtn');
+      var menu = $('#mobileMenu');
+      function setMenu(open) {
+        menu.classList.toggle('hidden', !open);
+        menuBtn.setAttribute('aria-expanded', String(open));
+        menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      }
+      menuBtn.addEventListener('click', function () { setMenu(menu.classList.contains('hidden')); });
+      $$('a', menu).forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
+
+      /* ---------- Legal modals: linkable as #privacy and #terms ---------- */
+      var MODALS = ['privacy', 'terms'];
+      function syncModal() {
+        var id = location.hash.slice(1);
+        MODALS.forEach(function (m) {
+          var d = document.getElementById(m);
+          if (m !== id && d.open) d.close();
+        });
+        if (MODALS.indexOf(id) > -1) {
+          var dlg = document.getElementById(id);
+          if (!dlg.open) dlg.showModal();
+          $('.legal-body', dlg).scrollTop = 0;
+        }
+      }
+      MODALS.forEach(function (m) {
+        var d = document.getElementById(m);
+        $('.modal-close', d).addEventListener('click', function () { d.close(); });
+        d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+        d.addEventListener('close', function () {
+          if (location.hash === '#' + m) history.replaceState(null, '', location.pathname + location.search);
+        });
+      });
+      window.addEventListener('hashchange', syncModal);
+      syncModal();
+
+      /* ---------- Scroll reveal ---------- */
+      var revealEls = $$('.reveal');
+      if ('IntersectionObserver' in window) {
+        var revealIO = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('in'); revealIO.unobserve(e.target); }
+          });
+        }, { rootMargin: '0px 0px -8% 0px' });
+        revealEls.forEach(function (el) { revealIO.observe(el); });
+      } else {
+        revealEls.forEach(function (el) { el.classList.add('in'); });
+      }
+
+      /* ---------- Interactive product demo ---------- */
+      var FIRST_TEXT = "Hi, it's the automated assistant for Your Roofing Co. Sorry we missed your call. Is this about a leak, storm damage or something else? Hablamos español. Reply STOP to opt out.";
+      var CONVO = {
+        en: {
+          name: 'Maria Delgado',
+          language: 'Language: English',
+          alertLang: '',
+          steps: [
+            { from: 'ai', text: FIRST_TEXT },
+            { from: 'home', text: 'Hail last night. Water is coming through the ceiling in the back bedroom.', fields: { damage: 'Hail, ceiling leak' }, detect: true },
+            { from: 'ai', text: "I'm sorry you're dealing with that. Let's get a roofer to take a look. What's the property address and ZIP?" },
+            { from: 'home', text: '4218 Cedar Elm Dr, Austin 78745', fields: { address: '4218 Cedar Elm Dr, Austin', zip: '78745' } },
+            { from: 'ai', text: 'Got it. Who should the roofer ask for?' },
+            { from: 'home', text: 'Maria Delgado', named: true },
+            { from: 'ai', text: "Thanks, Maria. Your inspection request is with the team, and they'll call this number to confirm a time. If you ever feel unsafe, please call 911." }
+          ]
+        },
+        es: {
+          name: 'María Delgado',
+          language: 'Language: Spanish',
+          alertLang: 'Prefers Spanish.',
+          steps: [
+            { from: 'ai', text: FIRST_TEXT },
+            { from: 'home', text: 'Granizo anoche. Está entrando agua por el techo del cuarto de atrás.', fields: { damage: 'Hail, ceiling leak' }, detect: true },
+            { from: 'ai', text: 'Lamento que esté pasando por esto. Vamos a coordinar que un techador lo revise. ¿Cuál es la dirección y el código postal?' },
+            { from: 'home', text: '4218 Cedar Elm Dr, Austin 78745', fields: { address: '4218 Cedar Elm Dr, Austin', zip: '78745' } },
+            { from: 'ai', text: 'Perfecto. ¿Por quién debe preguntar el techador?' },
+            { from: 'home', text: 'María Delgado', named: true },
+            { from: 'ai', text: 'Gracias, María. Su solicitud de inspección ya está con el equipo, y le llamarán a este número para confirmar la hora. Si en algún momento se siente en peligro, llame al 911.' }
+          ]
+        }
+      };
+
+      var chat = $('#chat');
+      var lang = 'en';
+      var runId = 0;
+      var captured = 0;
+      var pills = {};
+      $$('[data-field]').forEach(function (el) { pills[el.getAttribute('data-field')] = el; });
+      var FIELD_TOTAL = Object.keys(pills).length;
+
+      function wait(ms) {
+        return reduceMotion ? Promise.resolve() : new Promise(function (r) { setTimeout(r, ms); });
+      }
+      function scrollChat() {
+        chat.scrollTo({ top: chat.scrollHeight, behavior: reduceMotion ? 'auto' : 'smooth' });
+      }
+      function addEl(className, html, text) {
+        var el = document.createElement('div');
+        el.className = className;
+        if (html) el.innerHTML = html;
+        if (text) el.textContent = text;
+        chat.appendChild(el);
+        scrollChat();
+        return el;
+      }
+      function setField(key, value) {
+        var el = pills[key];
+        el.textContent = value;
+        el.classList.add('captured');
+        captured += 1;
+        $('#fieldCount').textContent = captured + ' of ' + FIELD_TOTAL + ' fields';
+        $('#bar').style.width = (captured / FIELD_TOTAL * 100) + '%';
+      }
+      function setStatus(text, done) {
+        var el = $('#leadStatus');
+        el.textContent = text;
+        el.classList.toggle('done', !!done);
+      }
+      function reset() {
+        chat.innerHTML = '';
+        captured = 0;
+        Object.keys(pills).forEach(function (k) {
+          pills[k].textContent = 'Listening';
+          pills[k].classList.remove('captured');
+        });
+        $('#leadName').textContent = 'Unknown caller';
+        $('#leadLang').textContent = 'Language: detecting';
+        $('#fieldCount').textContent = '0 of ' + FIELD_TOTAL + ' fields';
+        $('#bar').style.width = '0';
+        $('#respTime').innerHTML = '&ndash;';
+        $('#nextStep').textContent = 'Qualifying';
+        setStatus('Waiting', false);
+        $('#alertTelegram').hidden = true;
+        $('#alertSms').hidden = true;
+        $('#alertsEmpty').hidden = false;
+      }
+
+      function play() {
+        var id = ++runId;
+        var convo = CONVO[lang];
+        reset();
+
+        function alive() { return id === runId; }
+
+        var chain = wait(250).then(function () {
+          if (!alive()) return;
+          addEl('sys', null, 'Missed call to Your Roofing Co. · 2:14 PM');
+          setField('phone', '(512) 555-0147');
+          setStatus('Qualifying', false);
+        });
+
+        convo.steps.forEach(function (step, i) {
+          chain = chain.then(function () {
+            if (!alive()) return;
+            if (step.from === 'ai') {
+              var bubble = reduceMotion ? null : addEl('bubble bubble-in', '<span class="typing" aria-hidden="true"><i></i><i></i><i></i></span>');
+              return wait(i === 0 ? 450 : 1050).then(function () {
+                if (!alive()) return;
+                if (bubble) bubble.remove();
+                addEl('bubble bubble-in', null, step.text);
+                if (i === 0) $('#respTime').textContent = '41ms';
+                return wait(1350);
+              });
+            }
+            return wait(350).then(function () {
+              if (!alive()) return;
+              addEl('bubble bubble-out', null, step.text);
+              return wait(450).then(function () {
+                if (!alive()) return;
+                if (step.detect) $('#leadLang').textContent = convo.language;
+                if (step.named) $('#leadName').textContent = convo.name;
+                Object.keys(step.fields || {}).forEach(function (k) { setField(k, step.fields[k]); });
+              });
+            });
+          });
+        });
+
+        chain.then(function () {
+          if (!alive()) return;
+          setStatus('Qualified', true);
+          $('#nextStep').textContent = 'Call to confirm time';
+          $$('.alert-name').forEach(function (el) { el.textContent = convo.name; });
+          $('.alert-lang').textContent = convo.alertLang;
+          $('#alertsEmpty').hidden = true;
+          $('#alertTelegram').hidden = false;
+          return wait(800).then(function () {
+            if (alive()) $('#alertSms').hidden = false;
+          });
+        });
+      }
+
+      $$('.seg-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          lang = btn.getAttribute('data-lang');
+          $$('.seg-btn').forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+          play();
+        });
+      });
+      $('#replay').addEventListener('click', play);
+
+      var hasPlayed = false;
+      function playOnce() { if (!hasPlayed) { hasPlayed = true; play(); } }
+
+      $('#watchDemo').addEventListener('click', function () {
+        hasPlayed = true;
+        $('#mockup').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        play();
+      });
+
+      if ('IntersectionObserver' in window) {
+        var demoIO = new IntersectionObserver(function (entries) {
+          if (entries[0].isIntersecting) { playOnce(); demoIO.disconnect(); }
+        }, { threshold: 0.2 });
+        demoIO.observe($('#mockup'));
+      } else {
+        playOnce();
+      }
+    })();
+  </script>
+</body>
+</html>
